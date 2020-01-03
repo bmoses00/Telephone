@@ -20,15 +20,16 @@ union semun {
 };
 
 int main() {
-  int shmd = shmget(SHMKEY, SIZE, 0);
-  int * length = shmat(shmd, 0, 0);
-
-  int semd = semget(SEMKEY, 1, 0600);
+  int semd = semget(SEMKEY, 1, 0);
   struct sembuf semaphore;
   semaphore.sem_num = 0;
   semaphore.sem_flg = SEM_UNDO;
   semaphore.sem_op = -1;
+  printf("Attempting to access file\n");
   semop(semd, &semaphore, 1);
+
+  int shmd = shmget(SHMKEY, SIZE, 0);
+  int * length = shmat(shmd, 0, 0);
 
   int fd = open("story.txt", O_RDWR);
 

@@ -52,10 +52,11 @@ void remove_content() {
 void create_content() {
   shmget(SHMKEY, SIZE, IPC_CREAT | 0600);
   open("story.txt", O_CREAT|O_WRONLY|O_TRUNC, 0777);
-  int semd = semget(SEMKEY, 1, 0600);
+  int semd = semget(SEMKEY, 1, IPC_CREAT | IPC_EXCL | 0600);
   union semun us;
   us.val = 1;
   semctl(semd, 0, SETVAL, us);
+
   printf("File created\nShared memory segment created\nSemaphore created\n");
 }
 
